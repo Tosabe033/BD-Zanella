@@ -275,7 +275,13 @@ SELECT marca, COUNT(*) AS total_por_marca FROM Motovehiculos GROUP BY marca;
 
 -- 52
 -- Consulta en lenguaje natural: Obtener el valor total de las compras de repuestos realizadas el último mes.
-SELECT SUM(total) AS total_compras_repuestos_mes FROM Compras WHERE fecha_compra >= CURDATE() - INTERVAL 1 MONTH;
+SELECT 
+    SUM(cantidad * precio_unitario) AS total_compras_repuestos_mes
+FROM 
+    Compras
+WHERE 
+    fecha_compra >= CURDATE() - INTERVAL 1 MONTH;
+
 -- Respuesta: Muestra el valor total de las compras de repuestos en el último mes.
 
 -- 53
@@ -290,7 +296,14 @@ SELECT MIN(fecha_venta) AS fecha_primera_venta FROM Ventas;
 
 -- 55
 -- Consulta en lenguaje natural: Calcular el precio promedio de los repuestos vendidos en el último trimestre.
-SELECT AVG(precio) AS promedio_precio_repuestos_trimestre FROM Detalle_ventas_repuestos WHERE fecha >= CURDATE() - INTERVAL 3 MONTH;
+SELECT AVG(precio_unitario) AS promedio_precio_repuestos_trimestre
+FROM Detalle_ventas_repuestos
+WHERE id_venta IN (
+    SELECT id_venta 
+    FROM Ventas 
+    WHERE fecha_venta >= CURDATE() - INTERVAL 3 MONTH
+);
+
 -- Respuesta: Muestra el precio promedio de los repuestos vendidos en el último trimestre.
 
 -- 56
@@ -470,7 +483,17 @@ SELECT id_cliente, SUM(total) AS total_compras_mensual FROM Ventas WHERE fecha_v
 
 -- 91
 -- Consulta en lenguaje natural: Contar el número de motovehículos vendidos en cada trimestre del último año.
-SELECT QUARTER(fecha_venta) AS trimestre, COUNT(*) AS total_vendidos FROM Detalle_ventas_motovehiculos WHERE fecha >= CURDATE() - INTERVAL 1 YEAR GROUP BY trimestre;
+SELECT 
+    QUARTER(V.fecha_venta) AS trimestre, 
+    COUNT(*) AS total_vendidos
+FROM 
+    Detalle_ventas_motovehiculos D
+JOIN 
+    Ventas V ON D.id_venta = V.id_venta
+WHERE 
+    V.fecha_venta >= CURDATE() - INTERVAL 1 YEAR
+GROUP BY 
+    trimestre;
 -- Respuesta: Muestra el total de motovehículos vendidos en cada trimestre del último año.
 
 -- 92

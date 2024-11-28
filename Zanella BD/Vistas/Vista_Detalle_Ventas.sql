@@ -1,5 +1,8 @@
 USE zanellaventasbuenosaires;
-DROP VIEW IF EXISTS Vista_Resumen_Ventas_Clientes;
+-- Eliminar la vista si ya existe
+DROP VIEW IF EXISTS Vista_Detalle_Ventas;
+
+-- Crear la nueva vista
 CREATE VIEW Vista_Detalle_Ventas AS
 SELECT 
     v.id_venta,

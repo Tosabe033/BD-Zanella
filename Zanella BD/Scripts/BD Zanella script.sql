@@ -84,7 +84,7 @@ CREATE TABLE Compras (
 
 -- Tabla de facturas
 CREATE TABLE Facturas (
-    id_factura INT AUTO_INCREMENT PRIMARY KEY,
+    id_factura INT AUTO_INCREMENT PRIMARY KEY,clientes
     id_venta INT NOT NULL,
     fecha_emision DATE NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
